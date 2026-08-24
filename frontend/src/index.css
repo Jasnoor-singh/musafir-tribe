@@ -1,0 +1,106 @@
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..700&family=Archivo:ital,wght@0,100..900;1,100..900&display=swap');
+@import "slick-carousel/slick/slick.css";
+@import "slick-carousel/slick/slick-theme.css";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ============================================================
+   MUSAFIR TRIBE — design tokens
+   Heritage-expedition look: parchment, espresso ink, antique gold
+   ============================================================ */
+:root {
+  --ink: #221A10;        /* warm espresso black  */
+  --ink-soft: #4A3B28;   /* secondary text       */
+  --cream: #FBF7EE;      /* parchment background */
+  --sand: #F1E8D6;       /* soft surfaces        */
+  --gold: #C2913B;       /* antique gold accent  */
+  --gold-bright: #E3B95C;/* hover gold           */
+  --hairline: rgba(34, 26, 16, 0.12);
+}
+
+a.active hr { display: block; }
+
+* { font-family: "Archivo", ui-sans-serif, system-ui, sans-serif; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background-color: var(--cream);
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection { background: var(--gold); color: var(--ink); }
+
+::-webkit-scrollbar { display: none; }
+
+:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+.prata-regular {
+  font-family: "Fraunces", serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+/* The whole site sets headings with these classes — pointing them
+   at Fraunces upgrades typography everywhere at once. */
+.teko {
+  font-family: "Fraunces", serif;
+  font-weight: 560;
+  font-style: normal;
+  font-variation-settings: "opsz" 80;
+}
+.teko-head {
+  font-family: "Fraunces", serif;
+  font-weight: 640;
+  font-style: normal;
+  font-variation-settings: "opsz" 144;
+}
+
+/* utility: spaced-caps label used across the new components */
+.eyebrow {
+  font-family: "Archivo", sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.22em;
+  font-weight: 600;
+}
+
+@media (max-width:640px){
+  a.active{
+    background-color: var(--ink);
+    color: var(--gold);
+  }
+}
+
+@keyframes scroll {
+  0%   { transform: translateX(100%); }
+  100% { transform: translateX(-100%); }
+}
+.animate-scroll {
+  display: inline-block;
+  animation: scroll 10s linear infinite;
+}
+
+/* slick carousel — quiet gold indicators */
+.slick-dots { margin-top: 20px; }
+.slick-dots li button:before {
+  color: var(--gold) !important;
+  opacity: 0.35;
+  font-size: 8px;
+}
+.slick-dots li.slick-active button:before {
+  color: var(--gold) !important;
+  opacity: 1;
+}

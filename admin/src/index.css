@@ -1,0 +1,38 @@
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..700&family=Archivo:ital,wght@0,100..900;1,100..900&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --ink: #221A10;
+  --cream: #FBF7EE;
+  --sand: #F1E8D6;
+  --gold: #C2913B;
+  --gold-bright: #E3B95C;
+}
+
+* { font-family: "Archivo", ui-sans-serif, system-ui, sans-serif; }
+
+body { background: var(--cream); color: var(--ink); -webkit-font-smoothing: antialiased; }
+
+.serif {
+  font-family: "Fraunces", serif;
+  font-weight: 580;
+  font-variation-settings: "opsz" 80;
+}
+
+.eyebrow {
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  font-weight: 600;
+}
+
+select, input, textarea {
+  border: 1px solid rgba(34,26,16,0.18);
+  outline-color: var(--gold);
+  border-radius: 4px;
+  background: #FFFDF8;
+}
+
+:focus-visible { outline: 2px solid var(--gold); outline-offset: 1px; }
