@@ -56,3 +56,17 @@ npm run lint --prefix admin
 ```
 
 Automated tests cover booking validation, fixed email recipient, required contact details, provider rejection, idempotent retries and server-side order pricing. Live email delivery also depends on Resend account configuration and network access.
+
+## Vercel production
+
+The GitHub repository is linked to three Vercel projects:
+
+| App | Project root | Production URL |
+| --- | --- | --- |
+| Storefront | `frontend` | https://musafir-tribe.vercel.app |
+| API | `backend` | https://musafir-tribe-api.vercel.app |
+| Admin | `admin` | https://musafir-tribe-admin.vercel.app |
+
+Both web apps use `VITE_BACKEND_URL=https://musafir-tribe-api.vercel.app`. The admin uses `VITE_STOREFRONT_URL=https://musafir-tribe.vercel.app`. Backend credentials are configured privately in Vercel; do not commit `.env` or `.vercel` files. Production API CORS allows the storefront and admin origins.
+
+The API requires MongoDB Atlas network access from the hosting environment. A successful Vercel build alone does not establish database connectivity: verify `/api/health` reports `database: connected`, then load the journey catalogue. Failed initial connections are retried on later requests.

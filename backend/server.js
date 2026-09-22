@@ -18,8 +18,7 @@ const app = express();
 const PORT = process.env.PORT || 4004;
 const isProd = process.env.NODE_ENV === "production";
 
-const databaseReady = connectDB();
-databaseReady.catch((err) => console.log("MongoDB connection failed:", err.message));
+connectDB().catch((err) => console.log("MongoDB connection failed:", err.message));
 connectCloudinary();
 
 // Trust the platform's reverse proxy (Vercel/Render/etc.) so req.ip,
@@ -55,7 +54,7 @@ app.use("/api/user/admin", authLimiter);
 // A serverless cold start must finish connecting before its first API response.
 app.use("/api", async (req, res, next) => {
     try {
-        await databaseReady;
+        await connectDB();
         next();
     } catch {
         res.status(503).json({ success: false, message: "The database is unavailable. Please try again shortly." });
