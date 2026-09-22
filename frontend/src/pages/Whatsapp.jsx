@@ -1,5 +1,5 @@
-import React from 'react';
-import { FaWhatsapp, FaRocketchat } from 'react-icons/fa'; // Using react-icons for WhatsApp icon
+
+import { FaWhatsapp } from "react-icons/fa"; // Using react-icons for WhatsApp icon
 
 const WhatsAppChat = () => {
   // WhatsApp phone number (use your actual business phone number)

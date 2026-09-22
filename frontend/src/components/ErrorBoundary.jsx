@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from "react";
 
 /**
@@ -17,7 +18,7 @@ class ErrorBoundary extends React.Component {
   }
 
   componentDidCatch(error, info) {
-    // In production this is where you'd forward to an error-tracking
+    // In production this is where you’d forward to an error-tracking
     // service (Sentry, LogRocket, etc.) — logging for now keeps it simple.
     console.error("Unhandled UI error:", error, info);
   }
@@ -32,7 +33,7 @@ class ErrorBoundary extends React.Component {
           </h1>
           <p className="text-[#221A10]/55 font-light max-w-md mb-8">
             Please refresh the page. If this keeps happening, reach us on
-            WhatsApp and we'll sort it out right away.
+            WhatsApp and we’ll sort it out right away.
           </p>
           <button
             onClick={() => window.location.reload()}
@@ -48,3 +49,5 @@ class ErrorBoundary extends React.Component {
 }
 
 export default ErrorBoundary;
+
+ErrorBoundary.propTypes = {children: PropTypes.node};

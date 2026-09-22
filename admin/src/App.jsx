@@ -1,4 +1,7 @@
-import React, { useEffect, useState } from 'react'
+import axios from 'axios';
+axios.defaults.timeout = 15000;
+
+import { useEffect, useState } from "react";
 import Navbar from './components/Navbar'
 import Sidebar from './components/Sidebar'
 import { Route, Routes, Navigate } from 'react-router-dom'
@@ -10,8 +13,6 @@ import Login from './components/Login'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css';
 
-export const backendUrl = import.meta.env.VITE_BACKEND_URL;
-export const currency = "₹ ";
 
 const App = () => {
   const [token, setToken] = useState(localStorage.getItem("token") ? localStorage.getItem("token") : "");

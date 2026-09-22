@@ -1,4 +1,5 @@
-import React from 'react'
+import PropTypes from 'prop-types';
+
 
 /**
  * Section "house mark" — spaced-caps serif in two tones with a
@@ -22,3 +23,5 @@ const Title = ({ text1, text2 }) => {
 }
 
 export default Title
+
+Title.propTypes = {text1: PropTypes.string, text2: PropTypes.string};

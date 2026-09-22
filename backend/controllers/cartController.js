@@ -48,8 +48,7 @@ const addToCart = async (req, res) => {
 
         // Update the cart data in the database
         await userModel.findByIdAndUpdate(userId, { cartData });
-        const pritdata = await userModel.findById(userId);
-        console.log(pritdata);
+
         
 
         res.json({ success: true, message: "Added to Cart" });
@@ -66,10 +65,11 @@ const addToCart = async (req, res) => {
 const updateCart  = async(req,res)=>{
     try {
         const {userId,itemId,quantity} = req.body
+        if (!/^[a-f\d]{24}$/i.test(itemId || '') || !Number.isInteger(quantity) || quantity < 0 || quantity > 99) return res.status(400).json({success:false,message:"Invalid wishlist item or quantity."});
         const userData = await userModel.findById(userId)
         let cartData =await userData.cartData;
 
-        cartData[itemId]=quantity
+        if (quantity === 0) delete cartData[itemId]; else cartData[itemId]=quantity
 
         await userModel.findByIdAndUpdate(userId,{cartData})
 

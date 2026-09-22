@@ -1,4 +1,4 @@
-import React from 'react'
+
 import { Link } from 'react-router-dom'
 
 const NotFound = () => {
@@ -6,11 +6,11 @@ const NotFound = () => {
     <div className='min-h-[50vh] flex flex-col items-center justify-center text-center py-20'>
       <span className='eyebrow text-[11px] text-[#C2913B] mb-3'>404</span>
       <h1 className='teko-head text-4xl sm:text-5xl text-[#221A10] mb-4'>
-        This trail doesn't exist.
+        This trail doesn’t exist.
       </h1>
       <p className='text-[#221A10]/55 font-light max-w-md mb-8'>
-        The page you're looking for may have moved, or the link might be off.
-        Let's get you back to exploring journeys.
+        The page you’re looking for may have moved, or the link might be off.
+        Let’s get you back to exploring journeys.
       </p>
       <Link
         to='/'

@@ -1,6 +1,7 @@
+import PropTypes from 'prop-types';
 import axios from 'axios'
-import React, { useEffect, useState } from 'react'
-import { backendUrl, currency } from '../App'
+import { useCallback, useEffect, useState } from "react";
+import { backendUrl, currency } from '../lib/config'
 import { toast } from 'react-toastify'
 
 const CATEGORIES = ["Mountains", "Deserts", "Beach"]
@@ -13,7 +14,7 @@ const List = ({ token }) => {
   const [search, setSearch] = useState("")
   const [categoryFilter, setCategoryFilter] = useState("All")
 
-  const fetchList = async () => {
+  const fetchList = useCallback(async () => {
     try {
       const response = await axios.get(backendUrl + "/api/product/list", { headers: { token } })
       if (response.data.success) {
@@ -25,9 +26,9 @@ const List = ({ token }) => {
       console.log(error)
       toast.error(error.message)
     }
-  }
+  }, [token])
 
-  useEffect(() => { fetchList() }, [])
+  useEffect(() => { fetchList() }, [fetchList])
 
   const removeProduct = async (id) => {
     if (!window.confirm("Delete this trip?")) return
@@ -229,3 +230,5 @@ const List = ({ token }) => {
 }
 
 export default List
+
+List.propTypes = {token: PropTypes.string.isRequired};

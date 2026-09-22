@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from 'react'
+import PropTypes from 'prop-types';
+import { useCallback, useEffect, useState } from "react";
 import axios from 'axios'
-import { backendUrl, currency } from '../App'
+import { backendUrl, currency } from '../lib/config'
 import { toast } from 'react-toastify'
 import { MdOutlineLandscape, MdOutlineShoppingBag, MdOutlinePeopleAlt, MdOutlinePayments } from "react-icons/md";
 
@@ -19,7 +20,7 @@ const Dashboard = ({ token }) => {
   const [stats, setStats] = useState(null)
   const [loading, setLoading] = useState(true)
 
-  const fetchStats = async () => {
+  const fetchStats = useCallback(async () => {
     try {
       const response = await axios.get(backendUrl + "/api/admin/stats", { headers: { token } })
       if (response.data.success) {
@@ -33,9 +34,9 @@ const Dashboard = ({ token }) => {
     } finally {
       setLoading(false)
     }
-  }
+  }, [token])
 
-  useEffect(() => { fetchStats() }, [])
+  useEffect(() => { fetchStats() }, [fetchStats])
 
   const fmt = (n) => Number(n || 0).toLocaleString("en-IN")
   const maxCat = stats?.tripsByCategory?.length
@@ -119,3 +120,7 @@ const Dashboard = ({ token }) => {
 }
 
 export default Dashboard
+
+Dashboard.propTypes = {token: PropTypes.string.isRequired};
+
+StatCard.propTypes = { Icon: PropTypes.elementType, label: PropTypes.string, value: PropTypes.oneOfType([PropTypes.number, PropTypes.string]), hint: PropTypes.string };

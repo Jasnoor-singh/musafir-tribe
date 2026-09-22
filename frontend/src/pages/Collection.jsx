@@ -1,152 +1,47 @@
-import React, { useContext, useEffect, useState } from 'react'
-import { ShopContext } from '../context/ShopContext'
-import { assets } from '../assets/frontend_assets/assets';
-import Title from '../components/Title';
+import { useContext, useMemo } from 'react';
+import { useSearchParams } from 'react-router-dom';
+import { ShopContext } from '../context/ShopContextValue';
 import ProductItem from '../components/ProductItem';
+import CatalogueState from '../components/CatalogueState';
 
-const Collection = () => {
+export default function Collection() {
+  const { products, productsLoading, productsError } = useContext(ShopContext);
+  const [params, setParams] = useSearchParams();
+  const search = params.get('q') || '';
+  const category = params.get('category') || '';
+  const sort = params.get('sort') || 'relevant';
+  const update = (key, value) => setParams(previous => {
+    const next = new URLSearchParams(previous);
+    if (value) next.set(key, value); else next.delete(key);
+    return next;
+  }, { replace: true });
+  const categories = [...new Set(['Mountains', 'Deserts', 'Beach', ...products.map(p => p.category).filter(Boolean)])];
+  const filtered = useMemo(() => {
+    const result = products.filter(p => (!category || p.category === category) &&
+      `${p.name} ${p.description}`.toLowerCase().includes(search.trim().toLowerCase()));
+    if (sort === 'low-high') result.sort((a, b) => a.price - b.price);
+    if (sort === 'high-low') result.sort((a, b) => b.price - a.price);
+    return result;
+  }, [products, category, search, sort]);
 
-  const { products,search,showSearch } = useContext(ShopContext)
-  const [showFilter, setShowFilter] = useState(false);
-  const [filterProducts, setFilterProducts] = useState([]);
-  const [category, setCategory] = useState([])
-  const [subCategory, setSubCategory] = useState([])
-  const [sortType,setSortType]=useState("relevant");
-
-  const toggleCategory = (e) => {
-    if (category.includes(e.target.value)) {
-      setCategory(prev => prev.filter(item => item !== e.target.value))
-    } else {
-      setCategory(prev => [...prev,e.target.value])
-    }
-  }
-
-  const toggleSubCategory = (e) => {
-    if (subCategory.includes(e.target.value)) {
-      setSubCategory(prev => prev.filter(item => item !== e.target.value))
-    } else {
-      setSubCategory(prev => [...prev,e.target.value])
-    }
-  }
-
-  // useEffect(() => {
-  //   setFilterProducts(products)
-  // }, [])
-
-  const applyFilter = () => {
-    let productsCopy = products.slice();
-
-    if(showSearch && search){
-      productsCopy= productsCopy.filter(item=>item.name.toLowerCase().includes(search.toLowerCase()))
-    }
-
-    if (category.length > 0 ) {
-      productsCopy = productsCopy.filter(item =>category.includes(item.category) )
-    }
-    if (subCategory.length > 0 ) {
-      productsCopy = productsCopy.filter(item =>subCategory.includes(item.subCategory) )
-    }
-    setFilterProducts(productsCopy)
-  }
-
-  const sortProduct =()=>{
-    let fpCopy = filterProducts.slice();
-    switch(sortType){
-      case 'low-high':
-        setFilterProducts(fpCopy.sort((a,b)=>(a.price-b.price)))
-        break;
-      
-        case 'high-low':
-          setFilterProducts(fpCopy.sort((a,b)=>(b.price-a.price)))
-          break;
-
-        default:
-          applyFilter();
-          break;
-    }
-  }
-
-  useEffect(() => {
-    applyFilter();
-  }, [category,subCategory,search,showSearch,products])
-
-  useEffect(() => {
-    sortProduct();
-  }, [sortType])
-
-  
-
-  return (
-    <div className='flex flex-col sm:flex-row gap-1 sm:gap-10  border-t'>
-      {/* Filter Options */}
-      <div className='min-w-60'>
-        <p className='my-2 text-xl flex items-center cursor-pointer gap-2 lg:mt-28 mt-24' onClick={() => setShowFilter(!showFilter)}>FILTER
-          <img src={assets.dropdown_icon}
-            className={`h-3 sm:hidden ${showFilter ? 'rotate-90' : ''}`}
-            alt="" />
-        </p>
-
-        {/* Catgory Filter */}
-        <div className={`border border-gray-300 pl-5 py-3 mt-18 ${showFilter ? '' : 'hidden'
-          } sm:block`}>
-          <p className='mb-3 text-sm font-medium'>CATEGORIES</p>
-          <div className='flex flex-col gap-2 text-sm font-light text-gray-700'>
-
-            <p className='flex gap-2'>
-              <input type="checkbox" className='w-3' value={'Mountains'} onChange={toggleCategory} />Mountains
-            </p>
-            <p className='flex gap-2'>
-              <input type="checkbox" className='w-3' value={'Deserts'} onChange={toggleCategory} />Deserts
-            </p>
-            <p className='flex gap-2'>
-              <input type="checkbox" className='w-3' value={'Beach'} onChange={toggleCategory} />Beach
-            </p>
-
-          </div>
-        </div>
-        {/* Sub Category Filter */}
-        {/* <div className={`border border-gray-300 pl-5 py-3 my-5 ${showFilter ? '' : 'hidden'
-          } sm:block`}>
-          <p className='mb-3 text-sm font-medium'>TYPE</p>
-          <div className='flex flex-col gap-2 textsm font-light text-gray-700'>
-
-            <p className='flex gap-2'>
-              <input type="checkbox" className='w-3' value={'Topwear'} onChange={toggleSubCategory} />Topwear
-            </p>
-            <p className='flex gap-2'>
-              <input type="checkbox" className='w-3' value={'Bottomwear'} onChange={toggleSubCategory} />Bottomwear
-            </p>
-            <p className='flex gap-2'>
-              <input type="checkbox" className='w-3' value={'Winterwear'} onChange={toggleSubCategory} />Winterwear
-            </p>
-
-          </div>
-        </div> */}
-      </div>
-      {/* Right Part */}
-      <div className='flex-1 mt-24'>
-        <div className='flex justify-between text-base sm-text-2xl mb-4'>
-          <Title text1={'ALL'} text2={'PACKAGES'} />
-          {/* Product Sort */}
-          <select className='border-2 border-gray-300 text-sm px-2'
-          onChange={(e)=>setSortType(e.target.value)}>
-            <option value="relevant">Sort By: Relevant</option>
-            <option value="low-high">Sort By: Low To High</option>
-            <option value="high-low">Sort By: High to Low</option>
-          </select>
-        </div>
-        {/* Map Products */}
-        <div className='grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 gap-y-6'>
-          {
-            filterProducts.map((item, index) => (
-              <ProductItem key={index} id={item._id} name={item.name} price={item.price} originalPrice={item.originalPrice} image={item.image}  reviews={item.reviews}/>
-            ))
-          }
-        </div>
-      </div>
+  return <section className="py-12 sm:py-16 min-h-[65vh]">
+    <p className="eyebrow text-xs text-[#8a6526] mb-4">Find your next escape</p>
+    <h1 className="teko-head text-4xl sm:text-6xl">A journey for every kind of you.</h1>
+    <p className="text-[#4A3B28] mt-5 max-w-xl leading-relaxed">Slow mornings, mountain trails or a change of scenery. Explore the collection and make room for something new.</p>
+    <div className="my-8 flex flex-col sm:flex-row gap-3">
+      <input aria-label="Search journeys" type="search" placeholder="Search a destination or journey…" value={search} onChange={e => update('q', e.target.value)} className="flex-1 min-w-0 bg-white border border-[#221A10]/20 rounded-lg p-4" />
+      <select aria-label="Sort journeys" value={sort} onChange={e => update('sort', e.target.value)} className="bg-white border border-[#221A10]/20 rounded-lg p-4">
+        <option value="relevant">Recommended</option><option value="low-high">Price: low to high</option><option value="high-low">Price: high to low</option>
+      </select>
     </div>
-  
-  )
+    <div className="flex flex-wrap gap-2 mb-8" aria-label="Journey categories">
+      {['', ...categories].map(value => <button key={value} aria-pressed={category === value} onClick={() => update('category', value)} className={`px-5 py-2.5 rounded-full text-sm border transition-colors ${category === value ? 'bg-[#221A10] text-[#FBF7EE] border-[#221A10]' : 'border-[#221A10]/20 hover:border-[#C2913B]'}`}>{value || 'All journeys'}</button>)}
+    </div>
+    <CatalogueState />
+    {!productsLoading && !productsError && <>
+      <p className="text-sm text-[#4A3B28] mb-5" aria-live="polite">{filtered.length} {filtered.length === 1 ? 'journey' : 'journeys'} to explore</p>
+      {filtered.length ? <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">{filtered.map(p => <ProductItem key={p._id} {...p} id={p._id} />)}</div> :
+        <div className="text-center py-16 bg-[#F1E8D6] rounded-xl"><h2 className="teko text-3xl">No journeys found</h2><p className="mt-3 mb-6">Try another destination or clear your filters.</p><button className="underline underline-offset-4" onClick={() => setParams({})}>Clear filters</button></div>}
+    </>}
+  </section>;
 }
-
-export default Collection

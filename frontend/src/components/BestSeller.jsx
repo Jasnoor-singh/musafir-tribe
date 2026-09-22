@@ -1,5 +1,5 @@
 // import React, { useContext, useEffect, useState } from 'react'
-// import { ShopContext } from '../context/ShopContext'
+// import { ShopContext } from '../context/ShopContextValue'
 // import Title from './Title';
 // import ProductItem from './ProductItem';
 
@@ -46,8 +46,8 @@
 
 // export default BestSeller
 
-import React, { useContext, useEffect, useState } from 'react';
-import { ShopContext } from '../context/ShopContext';
+import { useContext, useEffect, useState } from "react";
+import { ShopContext } from '../context/ShopContextValue';
 import Slider from 'react-slick';
 import Title from './Title';
 import ProductItem from './ProductItem';

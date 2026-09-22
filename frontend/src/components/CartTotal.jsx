@@ -1,18 +1,18 @@
-import React, { useContext } from 'react'
-import { ShopContext } from '../context/ShopContext'
+import { useContext } from "react";
+import { ShopContext } from '../context/ShopContextValue'
 import Title from './Title';
 
 const CartTotal = () => {
   const { currency, getCartAmount, delivery_fee } = useContext(ShopContext);
 
   // Logic for Free Shipping
-  const isFreeShipping = getCartAmount() > 200;
+  const isFreeShipping = false;
   const finalDeliveryFee = isFreeShipping ? 0 : delivery_fee;
 
   return (
     <div className='w-full'>
       <div className='text-2xl'>
-        <Title text1={'CART'} text2={'TOTALS'} />
+        <Title text1={'BOOKING'} text2={'TOTAL'} />
       </div>
       <div className='flex flex-col gap-2 mt-2 text-sm'>
         {/* Subtotal */}
@@ -22,9 +22,9 @@ const CartTotal = () => {
         </div>
         <hr />
 
-        {/* Shipping Fee */}
+        {/* Booking fee */}
         <div className='flex justify-between items-center'>
-          <p>Shipping Fee</p>
+          <p>Booking fee</p>
           {isFreeShipping ? (
             <div className='flex items-center gap-2'>
               <p className='line-through text-gray-400'>{currency}{delivery_fee}.00</p>

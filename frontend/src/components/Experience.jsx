@@ -1,4 +1,4 @@
-import React from 'react';
+
 import Button from './Button';
 import { motion } from 'framer-motion';
 import CountUp from 'react-countup'; // Import CountUp

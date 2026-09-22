@@ -1,40 +1,18 @@
-import React from 'react'
-import Hero from '../components/Hero'
-import LatestCollection from '../components/LatestCollection'
-import BestSeller from '../components/BestSeller'
-import OurPolicy from '../components/OurPolicy'
-import NewsLetterBox from '../components/NewsLetterBox'
-import WhatsAppChat from './Whatsapp'
-import HomeFeedback from '../components/HomeFeedback'
-import CategoriesSlider from '../components/Categories'
-import Experience from '../components/Experience'
-import Gallery from '../components/Gallery'
-import ContactUs from '../components/ContactUs'
-import PopupForm from '../components/Popupform'
-// import Freeship from '../components/Freeship'
+import LatestCollection from '../components/LatestCollection';
+import WhatsAppChat from './Whatsapp';
+import HomeFeedback from '../components/HomeFeedback';
+import CategoriesSlider from '../components/Categories';
+import Gallery from '../components/Gallery';
+import ContactUs from '../components/ContactUs';
 
-
-const Home = () => {
-  return (
-    <div>
-
-      
-        
-       
-        <PopupForm />
-        <CategoriesSlider/>
-        {/* <Experience/> */}
-        <LatestCollection/>
-        {/* <BestSeller/> */}
-        
-        {/* <OurPolicy/> */}
-        <Gallery/>
-        <HomeFeedback/>
-        {/* <NewsLetterBox/> */}
-        <ContactUs/>
-        <WhatsAppChat />
-    </div>
-  )
+export default function Home() {
+  return <div className="homepage">
+    <div className="home-manifesto"><span>Made for curious souls.</span><p>Find your place. Meet your people. <em>Travel with the tribe.</em></p><span>EST. IN ADVENTURE ↗</span></div>
+    <CategoriesSlider />
+    <LatestCollection />
+    <Gallery />
+    <HomeFeedback />
+    <ContactUs />
+    <WhatsAppChat />
+  </div>;
 }
-
-export default Home

@@ -1,4 +1,4 @@
-import React from "react";
+
 import { toast } from "react-toastify";
 import Button from "./Button";
 import {Toaster} from "react-hot-toast"
@@ -39,7 +39,7 @@ const NewsLetterBox = () => {
 
       {/* Subheading */}
       <p className="text-gray-500  hover:opacity-100 transition-opacity duration-300 text-md">
-        We'd love to hear your thoughts and feedback!
+        We’d love to hear your thoughts and feedback!
       </p>
 
       {/* Form */}

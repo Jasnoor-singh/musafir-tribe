@@ -76,7 +76,7 @@ const listProducts = async (req, res) => {
 
         const productsWithDefaultPrice = products.map(product => ({
             ...product._doc,
-            originalPrice: product.originalPrice || 2000 // Use 2000 if originalPrice is undefined
+            originalPrice: product.originalPrice || product.price // Use 2000 if originalPrice is undefined
         }));
         res.json({success:true,products : productsWithDefaultPrice})
         // console.log(products);
@@ -162,7 +162,7 @@ export const addReview = async (req, res) => {
             return res.status(404).json({ message: "Product not found" });
         }
 
-        const review = { userId, name, rating, comment, images: imagesUrl,videos: [videoUrl].filter(Boolean) };
+        const review = { userId, name, rating, comment, images: imagesUrl,videos: videoUrl };
         console.log(review);
         
         product.reviews.push(review);

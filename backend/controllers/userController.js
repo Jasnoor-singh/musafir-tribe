@@ -5,7 +5,7 @@ import jwt from "jsonwebtoken";
 
 
 const createToken = (id) => {
-    return jwt.sign({ id }, process.env.JWT_SECRET)
+    return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: "7d" })
 }
 
 
@@ -13,7 +13,9 @@ const createToken = (id) => {
 //Route for user login
 const loginUser = async (req,res) => {
     try {
-        const { email, password } = req.body;
+        const { password } = req.body;
+        const email = typeof req.body.email === 'string' ? req.body.email.trim().toLowerCase() : '';
+        if (!validator.isEmail(email) || typeof password !== 'string') return res.status(400).json({success:false,message:"Enter a valid email and password."});
 
         const user = await userModel.findOne({ email });
 
@@ -43,7 +45,9 @@ const loginUser = async (req,res) => {
 //Route for user registration
 const registerUser = async (req, res) => {
     try {
-        const { name, email, password } = req.body;
+        const { name, password } = req.body;
+        const email = typeof req.body.email === 'string' ? req.body.email.trim().toLowerCase() : '';
+        if (typeof name !== 'string' || !name.trim() || !validator.isEmail(email) || typeof password !== 'string' || password.length < 8) return res.status(400).json({success:false,message:"Enter your name, a valid email and a password of at least 8 characters."});
 
         // checking already existing user
 
@@ -92,8 +96,8 @@ const registerUser = async (req, res) => {
 const adminLogin = async (req, res) => {
     try{
         const{email,password}=req.body
-        if(email===process.env.ADMIN_EMAIL && password===process.env.ADMIN_PASSWORD){
-            const token = jwt.sign(email+password,process.env.JWT_SECRET)
+        if(process.env.ADMIN_EMAIL && process.env.ADMIN_PASSWORD && email===process.env.ADMIN_EMAIL && password===process.env.ADMIN_PASSWORD){
+            const token = jwt.sign({role:"admin"},process.env.JWT_SECRET,{expiresIn:"8h"})
             res.json({
                 success:true,
                 token

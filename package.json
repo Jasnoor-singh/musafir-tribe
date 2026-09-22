@@ -1,0 +1,11 @@
+{
+  "name": "musafir-tribe",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node scripts/dev.mjs",
+    "install:all": "npm ci --prefix backend && npm ci --prefix frontend && npm ci --prefix admin",
+    "build": "npm run build --prefix frontend && npm run build --prefix admin",
+    "test": "npm test --prefix backend"
+  }
+}

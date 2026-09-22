@@ -1,13 +1,14 @@
-import React, { useContext, useState, useEffect } from 'react';
+import { useContext, useState, useEffect } from "react";
 import { assets } from "../assets/frontend_assets/assets";
 import { Link, NavLink, useLocation } from 'react-router-dom';
-import { ShopContext } from '../context/ShopContext';
+import { ShopContext } from '../context/ShopContextValue';
 import { FiSearch } from "react-icons/fi";
 import { FaUser } from "react-icons/fa6";
 import { RiMenu5Fill, RiCloseLine } from "react-icons/ri";
 import { IoCart } from "react-icons/io5";
 
 const Navbar = () => {
+    const [accountOpen, setAccountOpen] = useState(false);
     const [visible, setVisible] = useState(false);
     const [scrolled, setScrolled] = useState(false);
     const { showSearch, setShowSearch, getCartCount, navigate, token, setToken, setCartItems } = useContext(ShopContext);
@@ -27,7 +28,8 @@ const Navbar = () => {
         setCartItems({});
     };
 
-    const showSearchIcon = location.pathname === "/collection";
+    const showSearchIcon = false;
+    useEffect(() => { setVisible(false); setAccountOpen(false); }, [location.pathname]);
 
     const links = [
         { to: '/', label: 'Home' },
@@ -69,12 +71,14 @@ const Navbar = () => {
                         )}
 
                         <div className='group relative flex items-center'>
+                            <button aria-label={token ? 'Account menu' : 'Sign in'} aria-expanded={accountOpen} onClick={() => token ? setAccountOpen(!accountOpen) : navigate('/login')} className='p-2'>
                             <FaUser
                                 className='w-[17px] h-[17px] cursor-pointer text-[#221A10]/70 hover:text-[#C2913B] transition-colors'
-                                onClick={() => (token ? null : navigate("/login"))}
+                                aria-hidden="true"
                             />
-                            {token && (
-                                <div className='group-hover:block hidden absolute right-0 top-full pt-4 z-10'>
+                            </button>
+                            {token && accountOpen && (
+                                <div className='absolute right-0 top-full pt-4 z-10'>
                                     <div className='flex flex-col w-40 py-2 bg-[#FBF7EE] border border-[#221A10]/10 shadow-[0_18px_40px_rgba(34,26,16,0.15)] text-sm'>
                                         <Link to="/orders" className='px-4 py-2.5 text-[#221A10]/75 hover:bg-[#F1E8D6] hover:text-[#221A10]'>My Orders</Link>
                                         <button onClick={logout} className='px-4 py-2.5 text-left text-[#221A10]/75 hover:bg-[#F1E8D6] hover:text-[#221A10]'>Logout</button>
@@ -83,7 +87,7 @@ const Navbar = () => {
                             )}
                         </div>
 
-                        <Link to='/cart' className='relative flex items-center'>
+                        <Link to='/cart' aria-label='Wishlist' className='relative flex items-center'>
                             <IoCart className='w-[21px] h-[21px] cursor-pointer text-[#221A10]/70 hover:text-[#C2913B] transition-colors' />
                             {getCartCount() > 0 && (
                                 <span className='absolute -right-2 -top-1.5 min-w-[15px] h-[15px] px-0.5 grid place-items-center bg-[#C2913B] text-[#221A10] rounded-full text-[9px] font-bold'>
@@ -92,7 +96,7 @@ const Navbar = () => {
                             )}
                         </Link>
 
-                        <RiMenu5Fill onClick={() => setVisible(true)} className='w-6 h-6 cursor-pointer sm:hidden' />
+                        <button aria-label='Open menu' aria-expanded={visible} onClick={() => setVisible(true)} className='p-2 sm:hidden'><RiMenu5Fill className='w-6 h-6' /></button>
                     </div>
                 </nav>
             </header>
@@ -100,12 +104,12 @@ const Navbar = () => {
             <div className="h-[72px]" />
 
             {/* Mobile drawer — espresso panel */}
-            <div className={`fixed inset-0 z-[60] sm:hidden transition-opacity duration-300 ${visible ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}>
+            <div inert={visible ? undefined : ""} aria-hidden={!visible} className={`fixed inset-0 z-[60] sm:hidden transition-opacity duration-300 ${visible ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}>
                 <div className='absolute inset-0 bg-[#221A10]/60' onClick={() => setVisible(false)} />
                 <aside className={`absolute top-0 right-0 h-full w-3/4 max-w-[300px] bg-[#221A10] shadow-2xl transition-transform duration-300 ${visible ? 'translate-x-0' : 'translate-x-full'}`}>
                     <div className='flex items-center justify-between px-5 h-[72px] border-b border-[#C2913B]/25'>
                         <span className='teko text-2xl text-[#E3B95C]'>Musafir Tribe</span>
-                        <RiCloseLine className='w-7 h-7 cursor-pointer text-[#FBF7EE]/80' onClick={() => setVisible(false)} />
+                        <button aria-label='Close menu' onClick={() => setVisible(false)}><RiCloseLine className='w-7 h-7 text-[#FBF7EE]/80' /></button>
                     </div>
                     <div className='flex flex-col p-4 gap-1'>
                         {links.map(({ to, label }) => (

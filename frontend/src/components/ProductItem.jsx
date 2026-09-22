@@ -1,9 +1,7 @@
-import React, { useContext } from "react";
-import { ShopContext } from "../context/ShopContext";
+import PropTypes from 'prop-types';
+import { useContext } from "react";
+import { ShopContext } from "../context/ShopContextValue";
 import { Link } from "react-router-dom";
-
-// Business WhatsApp number (country code + number, for wa.me)
-const WHATSAPP_NUMBER = "918295699366";
 
 const ProductItem = ({ id, image, name, price, originalPrice, reviews = [] }) => {
   const { currency } = useContext(ShopContext);
@@ -19,17 +17,6 @@ const ProductItem = ({ id, image, name, price, originalPrice, reviews = [] }) =>
       : 0;
 
   const fmt = (n) => Number(n).toLocaleString("en-IN");
-
-  const bookOnWhatsApp = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    const msg = `Hi! I'm interested in the "${name}" journey (${currency}${fmt(price)}). Could you share more details?`;
-    window.open(
-      `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`,
-      "_blank",
-      "noopener,noreferrer"
-    );
-  };
 
   return (
     <div className="group flex flex-col bg-[#FFFDF8] border border-[#221A10]/10 overflow-hidden h-full
@@ -84,16 +71,18 @@ const ProductItem = ({ id, image, name, price, originalPrice, reviews = [] }) =>
           <span className="eyebrow text-[8px] text-[#221A10]/45 w-full mt-0.5">per person</span>
         </div>
 
-        <button
-          onClick={bookOnWhatsApp}
+        <Link
+          to={`/product/${id}`}
           className="mt-5 w-full eyebrow text-[11px] py-3 bg-transparent text-[#221A10] border border-[#221A10]/30
                      hover:bg-[#221A10] hover:text-[#E3B95C] hover:border-[#221A10] transition-colors duration-300"
         >
-          Book now
-        </button>
+          View & book
+        </Link>
       </div>
     </div>
   );
 };
 
 export default ProductItem;
+
+ProductItem.propTypes = {id: PropTypes.string.isRequired, image: PropTypes.arrayOf(PropTypes.string), name: PropTypes.string, price: PropTypes.number, originalPrice: PropTypes.number, reviews: PropTypes.arrayOf(PropTypes.shape({rating: PropTypes.number}))};

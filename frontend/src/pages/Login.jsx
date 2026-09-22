@@ -1,6 +1,6 @@
-import React, { useContext, useEffect, useState } from "react";
-import { ShopContext } from "../context/ShopContext";
-import axios from "axios";
+import { useContext, useEffect, useState } from "react";
+import { ShopContext } from "../context/ShopContextValue";
+import axios from "../lib/api";
 import { toast } from "react-toastify";
 import { assets } from "../assets/frontend_assets/assets";
 import signupp from "../assets/Mobile login-bro.png"
@@ -10,12 +10,15 @@ import Button from "../components/Button";
 const Login = () => {
   const [currentState, setCurrentState] = useState("Login");
   const { token, setToken, navigate, backendUrl } = useContext(ShopContext);
+  const [submitting, setSubmitting] = useState(false);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const onSubmitHandler = async (e) => {
     e.preventDefault();
+    if (submitting) return;
+    setSubmitting(true);
     try {
       if (currentState === "Sign Up") {
         const response = await axios.post(backendUrl + "/api/user/register", {
@@ -46,20 +49,21 @@ const Login = () => {
     } catch (error) {
       console.log(error);
       toast.error(error.message);
-    }
+    } finally { setSubmitting(false); }
   };
 
   useEffect(() => {
     if (token) {
       navigate("/");
     }
-  }, [token]);
+  }, [token, navigate]);
 
   return (
     <div className="flex flex-col md:flex-row items-center justify-center w-full h-screen bg-[#FAF8ED]">
       {/* Left Section - Form */}
       <div className="w-full md:w-1/2 flex flex-col justify-center items-center bg-[#FAF8ED] h-full px-8 lg:px-24">
         <div className="w-full max-w-md">
+          <button onClick={() => navigate('/collection')} className="text-sm underline mb-6">← Back to journeys</button>
           {/* Logo */}
           <div className="mb-4 text-center">
             <img
@@ -92,6 +96,7 @@ const Login = () => {
               <FaEnvelope className="absolute top-3 left-3 text-yellow-600" />
               <input
                 type="email"
+                aria-label="Email" autoComplete="email"
                 className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-500"
                 placeholder="Enter your email"
                 required
@@ -105,6 +110,7 @@ const Login = () => {
               <FaLock className="absolute top-3 left-3 text-yellow-600" />
               <input
                 type="password"
+                aria-label="Password" minLength={currentState === "Sign Up" ? 8 : undefined} autoComplete={currentState === "Sign Up" ? "new-password" : "current-password"}
                 className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-500"
                 placeholder="Enter your password"
                 required
@@ -115,10 +121,10 @@ const Login = () => {
 
             {/* Submit Button */}
             <Button
-              type="submit"
+              type="submit" disabled={submitting}
               className="w-full  text-white rounded-md text-lg font-medium  transition shadow-lg"
             >
-              {currentState === "Login" ? "Login now" : "Sign up now"}
+              {submitting ? "Please wait…" : currentState === "Login" ? "Login now" : "Sign up now"}
             </Button>
           </form>
 

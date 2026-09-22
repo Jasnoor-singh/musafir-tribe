@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { assets } from "../assets/frontend_assets/assets";
 
 const PopupForm = () => {
@@ -39,7 +39,7 @@ const PopupForm = () => {
       name: name,
       email: email,
       message: `
-*Let's Plan Your Next Trip!*
+*Let’s Plan Your Next Trip!*
 Name: ${name}
 Mobile: ${mobile}
 Travelers: ${travelers || "Not Specified"}
@@ -104,7 +104,7 @@ Message: ${message || "No message provided"}
                   Request sent!
                 </h2>
                 <p className="text-sm text-gray-500">
-                  Thanks — we'll be in touch shortly to plan your trip.
+                  Thanks — we’ll be in touch shortly to plan your trip.
                 </p>
                 <button
                   onClick={closePopup}

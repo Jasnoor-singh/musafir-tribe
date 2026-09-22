@@ -1,7 +1,8 @@
-import React, { useState } from 'react'
-import { assets } from '../assets/admin_assets/assets'
+import PropTypes from 'prop-types';
+import { useState } from "react";
+
 import axios from 'axios'
-import { backendUrl } from '../App'
+import { backendUrl } from '../lib/config'
 import { toast } from 'react-toastify'
 
 const CATEGORIES = ["Mountains", "Deserts", "Beach"]
@@ -144,3 +145,5 @@ const Add = ({ token }) => {
 }
 
 export default Add
+
+Add.propTypes = {token: PropTypes.string.isRequired};

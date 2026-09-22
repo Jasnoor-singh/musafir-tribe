@@ -1,7 +1,7 @@
 
 
 
-import React from 'react';
+
 import { FaExchangeAlt, FaRegCheckCircle, FaHeadset } from 'react-icons/fa'; // Importing icons
 import Title from './Title';
 

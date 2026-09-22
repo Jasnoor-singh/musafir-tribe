@@ -1,7 +1,8 @@
-import React from 'react'
-import { useState } from 'react'
+import PropTypes from 'prop-types';
+
+import { useState, useCallback } from 'react'
 import axios from 'axios'
-import { backendUrl, currency } from '../App'
+import { backendUrl, currency } from '../lib/config'
 import { useEffect } from 'react'
 import { assets } from '../assets/admin_assets/assets'
 import {toast} from "react-toastify"
@@ -10,7 +11,7 @@ const Orders = ({ token }) => {
 
   const [orders, setOrders] = useState([])
 
-  const fetchAllOrders = async () => {
+  const fetchAllOrders = useCallback(async () => {
     if (!token) {
       return null
     }
@@ -27,7 +28,7 @@ const Orders = ({ token }) => {
       toast.error(error.message)
 
     }
-  }
+  }, [token])
 
   const statusHandler = async(e,orderId)=>{
     try {
@@ -43,7 +44,7 @@ const Orders = ({ token }) => {
 
   useEffect(() => {
     fetchAllOrders();
-  }, [token])
+  }, [fetchAllOrders])
 
 
 
@@ -107,3 +108,4 @@ const Orders = ({ token }) => {
 }
 
 export default Orders
+Orders.propTypes = {token: PropTypes.string.isRequired};

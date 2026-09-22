@@ -1,8 +1,9 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { ShopContext } from '../context/ShopContext';
+import { useContext, useEffect, useState } from "react";
+import { ShopContext } from '../context/ShopContextValue';
 import { useParams } from 'react-router-dom';
 import RelatedProducts from '../components/RelatedProducts';
 import Button from '../components/Button';
+import CatalogueState from '../components/CatalogueState';
 import ProductReviews from '../components/Review';
 import BookNowForm from '../components/BookNowForm';
 import galleryImage1 from '../assets/download (1).jpeg';
@@ -13,20 +14,10 @@ import galleryImage5 from '../assets/licensed-image.jpeg';
 
 const Product = () => {
   const { productId } = useParams();
-  const { products, currency, addToCart, navigate } = useContext(ShopContext);
+  const { products, productsLoading, productsError, currency, addToCart, navigate } = useContext(ShopContext);
   const [productData, setProductData] = useState(false);
   const [image, setImage] = useState('');
   const [showBooking, setShowBooking] = useState(false);
-
-  const fetchProductData = async () => {
-    products.map((item) => {
-      if (item._id === productId) {
-        setProductData(item);
-        setImage(item.image[0]);
-        return null;
-      }
-    });
-  };
 
   const calculateDiscount = () => {
     if (productData && productData.originalPrice && productData.price) {
@@ -39,13 +30,16 @@ const Product = () => {
   const discount = calculateDiscount();
 
   useEffect(() => {
-    fetchProductData();
+    const found = products.find(item => item._id === productId);
+    setProductData(found || false);
+    setImage(found?.image?.[0] || '');
+    setShowBooking(false);
   }, [productId, products]);
 
   return productData ? (
-    <div className="pt-40 transition-opacity ease-in duration-500 opacity-100"> 
+    <div className="pt-12 sm:pt-16 transition-opacity ease-in duration-500 opacity-100">
       {/* Added pt-20 to add space for the fixed navbar */}
-      
+
       {/* Product Data */}
       <div className="flex gap-12 sm:gap-12 flex-col sm:flex-row">
         {/* Product Images */}
@@ -62,7 +56,7 @@ const Product = () => {
             ))}
           </div>
           <div className="w-full sm:w-[80%]">
-            <img src={image} alt="" className="w-full h-auto border border-orange-500 rounded-md" />
+            <img src={image} alt={productData.name} className="w-full aspect-[4/3] object-cover rounded-lg" />
           </div>
         </div>
         {/* Product Information */}
@@ -70,8 +64,8 @@ const Product = () => {
           <h1 className="font-bold text-2xl sm:text-2xl lg:text-3xl mt-2 capitalize text-orange-950">{productData.name}</h1>
           <div className="flex gap-x-2">
             <p className="mt-5 text-2xl font-bold flex items-center">{currency}{productData.price}</p>
-            <p className="mt-5 text-sm text-gray-500 line-through flex items-center">{currency}{productData.originalPrice}</p>
-            <p className="mt-5 text-sm text-green-600 flex items-center">({discount}% off)</p>
+            {discount > 0 && <p className="mt-5 text-sm text-gray-500 line-through flex items-center">{currency}{productData.originalPrice}</p>}
+            {discount > 0 && <p className="mt-5 text-sm text-green-600 flex items-center">({discount}% off)</p>}
           </div>
           <p className="mt-5 text-gray-500 md:w-4/5 text-sm lg:text-md">{productData.description}</p>
           <div className="flex flex-col gap-4 my-8"></div>
@@ -85,20 +79,12 @@ const Product = () => {
             <Button
               className="text-sm"
               onClick={async () => {
-                await addToCart(productData._id);
-                navigate("/cart");
+                if (await addToCart(productData._id)) navigate("/cart");
               }}
             >
               ADD TO WISHLIST
             </Button>
-            <Button
-              className="text-sm"
-              onClick={async () => {
-                window.location.href = productData.link;
-              }}
-            >
-              DOWNLOAD BROCHURE
-            </Button>
+            {/^https?:\/\//.test(productData.link || '') && <a className="px-5 py-3 border border-[#221A10]/30 rounded text-sm" href={productData.link} target="_blank" rel="noopener noreferrer">VIEW BROCHURE</a>}
           </div>
 
           <hr className="mt-8 sm:4/5" />
@@ -112,7 +98,7 @@ const Product = () => {
         <h2 className="text-2xl font-bold mb-6">From our gallery</h2>
         <p className="text-gray-500 mb-8">Check out these beautiful destinations captured by our community.</p>
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-          {[galleryImage1, galleryImage2, galleryImage3, galleryImage4, galleryImage5, galleryImage5, galleryImage5, galleryImage5].map((image, index) => (
+          {[galleryImage1, galleryImage2, galleryImage3, galleryImage4, galleryImage5].map((image, index) => (
             <img
               src={image}
               alt={`Gallery ${index}`}
@@ -129,19 +115,20 @@ const Product = () => {
       <ProductReviews productId={productId} />
 
       {/* Display Related Products */}
-      <RelatedProducts category={productData.category} subCategory={productData.subCategory} />
+      <RelatedProducts excludeId={productId} category={productData.category} subCategory={productData.subCategory} />
 
       {/* Book Now enquiry modal */}
       <BookNowForm
         isOpen={showBooking}
         onClose={() => setShowBooking(false)}
+        productId={productData._id}
         packageName={productData.name}
         price={productData.price}
         currency={currency}
       />
     </div>
   ) : (
-    <div className="opacity-0"></div>
+    <div className="py-16 min-h-[50vh]">{productsLoading || productsError ? <CatalogueState /> : <div className="text-center"><h1 className="teko text-4xl">Journey not found</h1><p className="my-5">This journey is no longer available.</p><Button onClick={() => navigate('/collection')}>Explore journeys</Button></div>}</div>
   );
 };
 

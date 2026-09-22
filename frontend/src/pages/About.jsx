@@ -1,7 +1,7 @@
-import React from 'react';
+
 import Title from '../components/Title';
 import { assets } from '../assets/frontend_assets/assets';
-import NewsLetterBox from "../components/NewsLetterBox";
+
 
 const About = () => {
   return (
@@ -25,9 +25,9 @@ const About = () => {
           At Musafir Tribe, we believe travel is the best teacher. What began as a small group of friends chasing sunrises across the Himalayas has grown into a community that plans unforgettable journeys for travellers from all over. We take care of the details — stays, routes, permits, and trusted local guides — so you can focus on the experience. Every package we offer is one we would happily pack our own bags for.
           </p>
           <p className='text-md  sm:text-md lg:text-lg leading-relaxed'>
-            Feel free to shoot me an email at <a href="hello@gmail.com" className='text-orange-500 font-semibold hover:underline'>
+            Feel free to shoot me an email at <a href="mailto:singhjasnoor618@gmail.com" className='text-orange-500 font-semibold hover:underline'>
               singhjasnoor618@gmail.com
-            </a> or connect with me on LinkedIn if you need any help!
+            </a> if you need help planning your trip!
           </p>
           <div className='mt-4'>
             <b className='text-gray-800 text-2xl sm:text-2xl lg:text-3xl teko tracking-wider'>Jasnoor Singh</b>
@@ -46,7 +46,7 @@ const About = () => {
             transition-all duration-300 ease-in-out hover:bg-orange-600 hover:text-white'>
           <b className='text-2xl sm:text-2xl lg:text-3xl teko tracking-wider'>Quality Assurance:</b>
           <p>
-            We ensure high-quality mentoring and guidance to help students excel in their professional journeys.
+            Browse journey details and compare destinations before deciding where to go.
           </p>
         </div>
         {/* Feature 2 */}
@@ -54,7 +54,7 @@ const About = () => {
             transition-all duration-300 ease-in-out hover:bg-orange-600 hover:text-white'>
           <b className='text-2xl sm:text-2xl lg:text-3xl teko tracking-wider'>Convenience:</b>
           <p>
-            Our platform offers a user-friendly experience, allowing students to connect seamlessly with mentors.
+            Save your favourite trips in one place and send an enquiry when you are ready.
           </p>
         </div>
         {/* Feature 3 */}
@@ -64,23 +64,6 @@ const About = () => {
           <p>
             Our team is always ready to provide support and address your queries efficiently.
           </p>
-        </div>
-      </div>
-
-      {/* DEMO OF PRODUCT */}
-      <div className='text-xl py-4'>
-        <Title text1={"DEMO OF"} text2={"PRODUCT"} />
-      </div>
-      <div className='flex justify-center items-center mb-20'>
-        <div className='w-full max-w-[800px]'>
-          <iframe
-            className='w-full aspect-video rounded-md shadow-lg'
-            src="https://www.youtube.com/embed"
-            title="Product Demo"
-            frameBorder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowFullScreen
-          ></iframe>
         </div>
       </div>
 

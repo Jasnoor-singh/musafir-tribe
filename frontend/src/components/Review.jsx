@@ -1,6 +1,7 @@
-import React, { useState, useEffect, useContext } from 'react';
-import axios from 'axios';
-import { ShopContext } from '../context/ShopContext';
+import PropTypes from 'prop-types';
+import { useState, useEffect, useContext, useCallback } from "react";
+import axios from '../lib/api';
+import { ShopContext } from '../context/ShopContextValue';
 import Title from './Title';
 import Button from './Button';
 import { toast } from 'react-toastify';
@@ -22,13 +23,7 @@ const ProductReviews = ({ productId }) => {
     const [ratingCounts, setRatingCounts] = useState([0, 0, 0, 0, 0]);
     const [isUploading, setIsUploading] = useState(false);
 
-    useEffect(() => {
-        if (token) {
-            fetchReviews();
-        }
-    }, [productId, token]);
-
-    const fetchReviews = async () => {
+    const fetchReviews = useCallback(async () => {
         try {
             const response = await axios.get(`${backendUrl}/api/product/${productId}/reviews`, 
                 { headers: { token } }
@@ -47,7 +42,9 @@ const ProductReviews = ({ productId }) => {
             console.error('Error fetching reviews:', err);
             toast.error('Failed to fetch reviews');
         }
-    };
+    }, [backendUrl, productId, token]);
+
+    useEffect(() => { if (token) fetchReviews(); }, [token, fetchReviews]);
 
     const calculateAverageRating = () => {
         const totalRating = reviews.reduce((sum, review) => sum + review.rating, 0);
@@ -355,3 +352,4 @@ const ProductReviews = ({ productId }) => {
 };
 
 export default ProductReviews;
+ProductReviews.propTypes = {productId: PropTypes.string.isRequired};

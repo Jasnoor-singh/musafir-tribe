@@ -1,4 +1,4 @@
-import React from 'react'
+
 import { assets } from '../assets/frontend_assets/assets'
 import { NavLink } from 'react-router-dom'
 
@@ -37,8 +37,8 @@ const Footer = () => {
           <p className='eyebrow text-[11px] text-[#E3B95C] mb-6'>Get in touch</p>
           <ul className='flex flex-col gap-3.5 text-sm text-[#FBF7EE]/65'>
             <li><a href="tel:+918295699366" className='hover:text-[#E3B95C] transition-colors'>+91 8295699366</a></li>
-            <li><a href="mailto:hello@musafirtribe.com" className='hover:text-[#E3B95C] transition-colors'>hello@musafirtribe.com</a></li>
-            <li className='font-light'>Ludhiana, Punjab, India</li>
+            <li><a href="mailto:singhjasnoor1421@gmail.com" className='hover:text-[#E3B95C] transition-colors'>singhjasnoor1421@gmail.com</a></li>
+            <li className='font-light'>Chitkara University</li>
           </ul>
         </div>
       </div>

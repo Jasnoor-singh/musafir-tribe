@@ -1,7 +1,10 @@
-import React, { useContext, useEffect, useState } from 'react'
-import { ShopContext } from '../context/ShopContext'
+import { useContext, useEffect, useState } from "react";
+import { ShopContext } from '../context/ShopContextValue'
 import Title from '../components/Title'
-import axios from 'axios'
+import { toast } from 'react-toastify'
+import { Link } from 'react-router-dom'
+import { useCallback } from 'react'
+import axios from '../lib/api'
 
 const Orders = () => {
 
@@ -9,7 +12,7 @@ const Orders = () => {
 
   const[orderData,setorderData]=useState([])
 
-  const loadOrderData = async()=>{
+  const loadOrderData = useCallback(async()=>{
     try {
       if (!token) {
         return null
@@ -38,11 +41,11 @@ const Orders = () => {
       console.log(error)
       toast.error(error.message)
     }
-  }
+  }, [token, backendUrl])
 
   useEffect(()=>{
     loadOrderData();
-  },[token])
+  },[loadOrderData])
 
 
   return (
@@ -50,6 +53,8 @@ const Orders = () => {
       <div className='text-2xl'>
         <Title text1={'MY'} text2={'ORDERS'} />
       </div>
+      {!token && <p className="py-10"><Link to="/login" className="underline">Sign in</Link> to view your bookings.</p>}
+      {token && !orderData.length && <p className="py-10">No bookings yet. <Link to="/collection" className="underline">Explore journeys</Link></p>}
       <div>
         {orderData.map((item, index) => (
           <div key={index} className='py-4 border-t border-b text-gray-700 flex flex-col md:flex-row md:items-center md:justify-between gap-4'>
